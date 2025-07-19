@@ -5,13 +5,15 @@ require "bot_box/config"
 require "bot_box/table_top"
 require "bot_box/commander"
 require "bot_box/robot"
+require "bot_box/logger"
 
 # puts "BotBox loaded..."
 
 module BotBox
 
-  def self.run(command_file:, board_size:)
-    # puts "#{BotBox::NAME} v#{BotBox::VERSION} running..."
+  def self.run(command_file:, board_size:, log_level: Logger::INFO)
+    BotBox.logger.level = log_level
+    BotBox.logger.info "#{BotBox::NAME} v#{BotBox::VERSION} running..."
 
     # Make sure that a command file is passed in.
     validate_command_file(command_file)
@@ -37,5 +39,9 @@ module BotBox
     if command_file.nil? || command_file.empty?
       raise ArgumentError, "Command file is required"
     end
-  end  
+  end
+
+  def self.logger
+    BotBox::Logger.logger
+  end
 end

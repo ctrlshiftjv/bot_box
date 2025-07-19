@@ -43,10 +43,14 @@ module BotBox
     # The other commands are ignored, if the robot is not placed.
     def simulate
       commander.commands.each do |command|
-        # puts "Command: #{command.command_type}"
+        BotBox.logger.info "Command: #{command.command_type}"
 
+        
         # Only perform the command, if the robot is placed or if the command is PLACE.
-        next unless placed || command.command_type == PLACE
+        unless placed || command.command_type == PLACE
+          BotBox.logger.warn "Robot is not placed in the table top, ignoring command: #{command.command_type}"
+          next
+        end
 
         case command.command_type
         when PLACE
@@ -71,21 +75,20 @@ module BotBox
     # @param y [Integer] - the y-coordinate of the robot.
     # @param f [Symbol] - the direction of the robot.
     def place(x,y,f)
-      # puts "Placing robot at #{x},#{y},#{f}"
+      BotBox.logger.info "Placing robot at #{x},#{y},#{f}"
 
       # Check if the position is valid.
-      unless valid_position?(x, y)
-        # puts "Invalid position: #{x},#{y}"
-        return
+      if valid_position?(x, y)
+        @x = x
+        @y = y
+        @f = f
+
+        @placed = true
+
+        BotBox.logger.info "Robot placed at #{x},#{y},#{f}"
+      else
+        BotBox.logger.warn "Invalid position: #{x},#{y}"
       end
-
-      @x = x
-      @y = y
-      @f = f
-
-      @placed = true
-
-      # puts "Robot placed at #{x},#{y},#{f}"
     end
 
     # Move the robot one step forward in the direction it is facing.
@@ -93,7 +96,7 @@ module BotBox
     # Before moving, the robot checks if the new position is valid.
     # If the new position is not valid, the robot does not move.
     def move
-      # puts "Robot is moving..."
+      BotBox.logger.info "Robot is moving..."
 
       new_x = @x
       new_y = @y
@@ -113,9 +116,9 @@ module BotBox
         @x = new_x
         @y = new_y
 
-        # puts "Robot moved to #{x},#{y},#{f}"
+        BotBox.logger.info "Robot moved to #{x},#{y},#{f}"
       else
-        # puts "Robot cannot move to #{new_x},#{new_y},#{f}"
+        BotBox.logger.warn "Robot cannot move to #{new_x},#{new_y},#{f}"
       end
     end
 
@@ -126,7 +129,7 @@ module BotBox
     # If it is facing south, it will face east.
     # If it is facing east, it will face north.
     def turn_left
-      # puts "Turning left from #{f}"
+      BotBox.logger.info "Turning left from #{@f}"
 
       case @f
       when NORTH
@@ -138,6 +141,8 @@ module BotBox
       when EAST
         @f = NORTH
       end
+
+      BotBox.logger.info "Turned left to #{@f}"
     end
 
     # Turn the robot 90 degrees to the right.
@@ -147,7 +152,7 @@ module BotBox
     # If it is facing south, it will face west.
     # If it is facing west, it will face north.
     def turn_right
-      # puts "Turning right from #{f}"
+      BotBox.logger.info "Turning right from #{@f}"
 
       case @f
       when NORTH
@@ -159,13 +164,15 @@ module BotBox
       when WEST
         @f = NORTH
       end
+
+      BotBox.logger.info "Turned right to #{@f}"
     end
 
     # Report the robot's position.
     #
     # @return [Array] - the robot's position.
     def report
-      # puts "Reporting position: #{x},#{y},#{f}"
+      BotBox.logger.info "#{x},#{y},#{f}"
 
       [x,y,f]
     end

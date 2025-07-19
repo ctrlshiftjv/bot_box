@@ -26,6 +26,13 @@ Alternatively, you can provide the size of the board with the optional argument 
 rake bot_box command_file=commands/forward board_size=5,5
 ```
 
+For a full list of arguments:
+```
+command_file [String] [required]
+board_size [String] [optional] - Default: 5,5 - L,W format where L and W are non-zero values
+log_level [String] [option] - Default: info - One of the following: debug, info, warn, error, fatal, unknown
+```
+
 ### Command Format
 Commands are read from a file with one command per line:
 - `PLACE X,Y,F` - Place robot at coordinates (X,Y) facing direction F

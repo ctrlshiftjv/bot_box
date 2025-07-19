@@ -7,9 +7,11 @@ task 'bot_box' do
 
   command_file = ENV["command_file"]
   board_size = ENV["board_size"] || "5,5"
+  log_level = ENV["log_level"] || Logger::INFO
 
   BotBox.run(
     command_file: command_file, 
-    board_size: board_size
+    board_size: board_size,
+    log_level: log_level
   )
 end
