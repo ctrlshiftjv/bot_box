@@ -16,8 +16,12 @@ module BotBox
     attr_reader :length, :width
 
     def initialize(length:, width:)
+      BotBox.logger.info "Initializing table top with length: #{length} and width: #{width}"
+
       @length = length
       @width = width
+
+      BotBox.logger.info "Table top initialized with length: #{length} and width: #{width}"
     end
 
   end

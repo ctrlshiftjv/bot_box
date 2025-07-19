@@ -29,8 +29,8 @@ rake bot_box command_file=commands/forward board_size=5,5
 For a full list of arguments:
 ```
 command_file [String] [required]
-board_size [String] [optional] - Default: 5,5 - L,W format where L and W are non-zero values
-log_level [String] [option] - Default: info - One of the following: debug, info, warn, error, fatal, unknown
+board_size [String] [optional] - Default: 5,5 - L,W format where L and W are positive integers excluding zero.
+log_level [String] [option] - Default: unknown - One of the following: debug, info, warn, error, fatal, unknown
 ```
 
 ### Command Format

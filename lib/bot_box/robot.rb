@@ -174,6 +174,9 @@ module BotBox
     def report
       BotBox.logger.info "#{x},#{y},#{f}"
 
+      # One of the requirement is to OUTPUT when report is called.
+      puts "#{x},#{y},#{f}"
+
       [x,y,f]
     end
 

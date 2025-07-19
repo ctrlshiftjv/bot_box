@@ -8,7 +8,7 @@ module BotBox
 
     def self.logger
       @logger ||= ::Logger.new($stdout).tap do |log|
-        log.level = ::Logger::INFO
+        log.level = ::Logger::UNKNOWN
         log.progname = BotBox::NAME
         log.formatter = proc do |severity, datetime, progname, msg|
           "[#{datetime.strftime('%Y-%m-%d %H:%M:%S')}] #{progname} #{severity}: #{msg}\n"
