@@ -1,5 +1,6 @@
 
 # puts "BotBox loading..."
+require "logger"
 
 require "bot_box/config"
 require "bot_box/table_top"
@@ -11,7 +12,7 @@ require "bot_box/logger"
 
 module BotBox
 
-  def self.run(command_file:, board_size:, log_level: Logger::UNKNOWN)
+  def self.run(command_file:, board_size:, log_level: ::Logger::UNKNOWN)
     BotBox.logger.level = log_level
     BotBox.logger.info "#{BotBox::NAME} v#{BotBox::VERSION} running..."
 

@@ -18,6 +18,10 @@ module BotBox
     def initialize(length:, width:)
       BotBox.logger.info "Initializing table top with length: #{length} and width: #{width}"
 
+      if length.nil? || width.nil? || length <= 0 || width <= 0
+        raise ArgumentError, "Length and width must greater than zero."
+      end
+
       @length = length
       @width = width
 
