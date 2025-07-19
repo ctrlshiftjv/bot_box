@@ -3,6 +3,8 @@
 
 require "bot_box/config"
 require "bot_box/table_top"
+require "bot_box/commander"
+require "bot_box/robot"
 
 # puts "BotBox loaded..."
 
