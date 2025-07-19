@@ -3,6 +3,7 @@ module BotBox
 
   NAME = "BotBox"
   VERSION = "0.0.1"
+  MAX_FILE_SIZE = 1024 * 1024
 
   # Directions CONSTANTS
   NORTH = "NORTH"

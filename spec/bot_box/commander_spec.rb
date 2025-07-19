@@ -62,7 +62,23 @@ RSpec.describe BotBox::Commander do
       end
 
       it 'raises ArgumentError when command file does not exist' do
-        expect { described_class.new('nonexistent_file.txt') }.to raise_error(ArgumentError, 'Command file does not exist')
+        expect { described_class.new('nonexistent_file') }.to raise_error(ArgumentError, 'Command file does not exist')
+      end
+
+      it 'raises ArgumentError when command file is not a plain text file' do
+        temp_file = 'temp_not_plain_text'
+        File.open(temp_file, 'wb') { |f| f.write("\xFF\xFE\xFA\xFB".b) }
+
+        expect { described_class.new(temp_file) }.to raise_error(ArgumentError, 'Command file must be a plain text file')
+        File.delete(temp_file)
+      end
+
+      it 'raises ArgumentError when command file type is not valid' do
+        temp_file = 'temp_not_valid.txt'
+        File.write(temp_file, "This is not a valid file")
+
+        expect { described_class.new(temp_file) }.to raise_error(ArgumentError, 'Command file type is not valid')
+        File.delete(temp_file)
       end
     end
   end
@@ -70,7 +86,7 @@ RSpec.describe BotBox::Commander do
   describe 'command parsing' do
     context 'with edge cases' do
       it 'handles single command file' do
-        temp_file = 'temp_single.txt'
+        temp_file = 'temp_single'
         File.write(temp_file, "PLACE 0,0,NORTH")
         commander = described_class.new(temp_file)
         
@@ -81,7 +97,7 @@ RSpec.describe BotBox::Commander do
       end
 
       it 'handles empty file' do
-        temp_file = 'temp_empty.txt'
+        temp_file = 'temp_empty'
         File.write(temp_file, "")
         commander = described_class.new(temp_file)
         
@@ -91,7 +107,7 @@ RSpec.describe BotBox::Commander do
       end
 
       it 'handles file with only whitespace' do
-        temp_file = 'temp_whitespace_only.txt'
+        temp_file = 'temp_whitespace_only'
         File.write(temp_file, "   \n  \n  ")
         commander = described_class.new(temp_file)
         
@@ -112,7 +128,7 @@ RSpec.describe BotBox::Commander do
         COMMANDS
 
         # Create a temporary file for this specific test since we need multiple PLACE commands
-        temp_file = 'temp_simple_commands.txt'
+        temp_file = 'temp_simple_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
         
@@ -135,7 +151,7 @@ RSpec.describe BotBox::Commander do
           REPORT
         COMMANDS
 
-        temp_file = 'temp_invalid_commands.txt'
+        temp_file = 'temp_invalid_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
 
@@ -157,7 +173,7 @@ RSpec.describe BotBox::Commander do
         COMMANDS
 
         # Create a temporary file for this specific test since we need multiple PLACE commands
-        temp_file = 'temp_place_commands.txt'
+        temp_file = 'temp_place_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
         
@@ -178,7 +194,7 @@ RSpec.describe BotBox::Commander do
           PLACE 1,b,WEST
         COMMANDS
 
-        temp_file = 'temp_invalid_place_commands.txt'
+        temp_file = 'temp_invalid_place_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
 
@@ -196,7 +212,7 @@ RSpec.describe BotBox::Commander do
           PLACE 2,-3,EAST
         COMMANDS
 
-        temp_file = 'temp_invalid_place_commands.txt'
+        temp_file = 'temp_invalid_place_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
 
@@ -213,7 +229,7 @@ RSpec.describe BotBox::Commander do
           PLACE 2,3,WEAST
         COMMANDS
 
-        temp_file = 'temp_invalid_place_commands.txt'
+        temp_file = 'temp_invalid_place_commands'
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
 
@@ -239,7 +255,7 @@ RSpec.describe BotBox::Commander do
           PLACE 0,0,NORTH
         COMMANDS
         
-        temp_file = "temp_wrong_args.txt"
+        temp_file = "temp_wrong_args"
         File.write(temp_file, commands_content)
         commander = described_class.new(temp_file)
         

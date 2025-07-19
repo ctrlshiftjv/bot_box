@@ -79,6 +79,9 @@ module BotBox
       raise ArgumentError, "Command file is required" if command_file.nil?
       raise ArgumentError, "Command file does not exist" unless File.exist?(command_file)
       raise ArgumentError, "Command file is not readable" unless File.readable?(command_file)
+      raise ArgumentError, "Command file type is not valid" unless file_without_extension?(command_file)
+      raise ArgumentError, "Command file size is too large" if File.size(command_file) > MAX_FILE_SIZE
+      raise ArgumentError, "Command file must be a plain text file" unless is_plain_text?(command_file)
     end
 
     # Clean the command;
@@ -153,6 +156,18 @@ module BotBox
       return false if str.nil? || str.empty?
 
       DIRECTIONS.include?(str)
+    end
+
+    def file_without_extension?(command_file)
+      filename = File.basename(command_file)
+      !filename.include?('.')
+    end
+
+    def is_plain_text?(command_file)
+      content = File.read(command_file)
+      content.valid_encoding?
+    rescue => e
+      false
     end
 
   end
