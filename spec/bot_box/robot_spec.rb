@@ -8,9 +8,9 @@ RSpec.describe BotBox::Robot do
   let(:robot) { described_class.new(table_top: table_top, command_file: command_file) }
 
   describe '#initialize' do
-    it 'creates robot with table top and commander' do
+    it 'creates robot with table top and command file' do
       expect(robot.table_top).to eq(table_top)
-      expect(robot.commander).to be_a(BotBox::Commander)
+      expect(robot.command_file).to be_a(BotBox::CommandFile)
       expect(robot.placed).to be false
       expect(robot.x).to be_nil
       expect(robot.y).to be_nil

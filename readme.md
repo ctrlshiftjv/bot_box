@@ -30,9 +30,14 @@ For a full list of arguments:
 
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `command_file` | String | Yes | - | Path to the command file |
+| `run_type` | String | No | listen | One of the following - listen, file |
+| `command_file` | String | Yes (file) | - | Path to the command file |
 | `board_size` | String | No | `5,5` | L,W format where L and W are positive integers excluding zero |
 | `log_level` | String | No | `unknown` | One of: debug, info, warn, error, fatal, unknown |
+
+### Run Types
+* **listen** - the program listens to the input and perform as you input.
+* **file** - the program performs the commands that is contained in the file provided.
 
 ### Command Format
 Commands are read from a file with one command per line:

@@ -16,7 +16,7 @@ module BotBox
 
     # table_top - the table top on which the robot may be placed.
     # command_file - the file containing the commands to be executed by the robot.
-    attr_reader :table_top, :commander
+    attr_reader :table_top, :command_file
 
     # placed - whether the robot is placed on the table top
     attr_reader :placed
@@ -28,7 +28,7 @@ module BotBox
 
     def initialize(table_top:, command_file:)
       @table_top = table_top
-      @commander = Commander.new(command_file)
+      @command_file = CommandFile.new(command_file)
 
       @placed = false
 
@@ -42,10 +42,12 @@ module BotBox
     # Got through each command and perform the action.
     # The other commands are ignored, if the robot is not placed.
     def simulate
-      commander.commands.each do |command|
+      @command_file.commands.each do |command_line|
+        command = Command.new(command_line)
+        next unless command.is_valid
+
         BotBox.logger.info "Command: #{command.command_type}"
 
-        
         # Only perform the command, if the robot is placed or if the command is PLACE.
         unless placed || command.command_type == PLACE
           BotBox.logger.warn "Robot is not placed in the table top, ignoring command: #{command.command_type}"

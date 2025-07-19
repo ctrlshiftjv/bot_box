@@ -3,10 +3,12 @@
 require "logger"
 
 require "bot_box/config"
-require "bot_box/table_top"
-require "bot_box/commander"
-require "bot_box/robot"
 require "bot_box/logger"
+
+require "bot_box/command_file"
+require "bot_box/command"
+require "bot_box/table_top"
+require "bot_box/robot"
 
 # puts "BotBox loaded..."
 
