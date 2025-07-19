@@ -48,22 +48,37 @@ module BotBox
 
     # Parse the command file and return a list of commands.
     def parsed_instructions
+      validate_command_file
+      
+      commands = []
+      line_number = 0
+      
+      File.foreach(command_file) do |line|
+        line_number += 1
+        line = line.strip
+        
+        # Skip empty lines
+        next if line.empty?
+        
+        # Clean the command; if a valid command is found store it, otherwise ignore it.
+        cleaned_command = clean_command(line)
+        if cleaned_command
+          commands << cleaned_command
+        else
+          BotBox.logger.debug "Ignored invalid command at line #{line_number}: #{line}"
+        end
+      end
+
+      BotBox.logger.info "Successfully parsed #{commands.length} commands from #{command_file}"
+
+      return commands
+    end
+
+    # Validate the command file before processing
+    def validate_command_file
       raise ArgumentError, "Command file is required" if command_file.nil?
       raise ArgumentError, "Command file does not exist" unless File.exist?(command_file)
-
-      commands = []
-
-      # Read the command file and parse the commands.
-      File.read(command_file).split("\n").map(&:strip).each do |command|
-
-        # Clean the command; if a valid command is found store it, otherwise ignore it.
-        cleaned_command = clean_command(command)
-        next if cleaned_command.nil?
-        
-        # Add the command to the list of commands.
-        commands << cleaned_command
-      end
-      commands
+      raise ArgumentError, "Command file is not readable" unless File.readable?(command_file)
     end
 
     # Clean the command;
@@ -74,19 +89,16 @@ module BotBox
     # 
     # @return [Command] - a Command object if the command is valid, otherwise nil
     def clean_command(command)
-      return if command.empty?
-
-      # Make sure that the command is clean
       if [MOVE, LEFT, RIGHT, REPORT].include?(command)
         return Command.new(command)
-      elsif command.include?(PLACE)
-        # Special case for the PLACE command;
-        # if the command is a PLACE command, a valid coordinates must be provided.
-        place_coordinates = get_place_coordinates(command)
-        unless place_coordinates.nil?
-          return Command.new(PLACE, place_coordinates)
-        end
       end
+      
+      if command.start_with?(PLACE)
+        place_coordinates = get_place_coordinates(command)
+        return Command.new(PLACE, place_coordinates) if place_coordinates
+      end
+      
+      nil
     end
 
     # Get the coordinates for the PLACE command. 
@@ -125,6 +137,8 @@ module BotBox
     #
     # @return [Boolean] - true if the string is a valid non-negative integer, otherwise false
     def valid_non_negative_integer?(str)
+      return false if str.nil? || str.empty?
+      
       Integer(str) >= 0
     rescue ArgumentError, TypeError
       false
@@ -136,6 +150,8 @@ module BotBox
     #
     # @return [Boolean] - true if the string is a valid direction, otherwise false
     def valid_direction?(str)
+      return false if str.nil? || str.empty?
+
       DIRECTIONS.include?(str)
     end
 
