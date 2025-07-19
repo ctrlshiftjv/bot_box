@@ -4,6 +4,11 @@ A Robot Simulator.
 ## Requirements
 * The application simulates a toy robot moving on a 5x5 square tabletop.
 * The robot can be controlled using the follwing commands:
+    * PLACE X,Y,F
+    * MOVE
+    * LEFT
+    * RIGHT
+    * REPORT
 * The PLACE command puts the robot at a position (X,Y,F) where F is direction the robots faces (NORTH, SOUTH, EAST, WEST)
 * The origin (0,0) is the SOUTHWEST corner of the table.
 * The first valid command MUST be a PLACE; all other commands are ignored until a valid PLACE is received.
@@ -13,15 +18,18 @@ A Robot Simulator.
 * The REPORT command outputs the robot's current X,Y,F 
 * The Robot ignores MOVE, LEFT, RIGHT AND REPORT commandds if it is not on the table.
 * The robot must not fall of the table at any time.
-* Any command that wuold cause the robot to fall off the table including initial placement will be classified as invalid and will be ingored. 
-
-## Assumptions
-* Since invalid commands will be ignored. If no valid command was placed, this means that the Robot is not in the table and will output "204: No Robot found."
+* Any command that would cause the robot to fall off the table including initial placement will be classified as invalid and will be ingored. 
 
 ## Concept
-In order to make sure that the Bot Box handles changing requirements, I have made it a tabletop-centric design. The relationship will most likely not be one robot in a multiple tabletop, but instead a tabletop may have multiple robots in the future. This way, it will be more open to changes in behavior.
+Just like in real life, the robot can receive a command file with a list of commands it needs to follow. Before it begins, it calls on the commander. The commander’s job is to look through the commands and get rid of anything that isn’t valid. This way, the robot only works with safe and proper instructions. After that, the robot goes through the list given by the commander. It is smart enough to check if a command will make it fall off the table and if it does, the robot simply ignore it.
+
+## Entities
+* TableTop - holds logic on the bounds.
+* Commander - holds all valid commands.
+* Command - a struct to hold a standardized format of a command.
+* Robot - holds all logic on how to perform a command.
 
 ## Enhancement
 * The table top dimensions can be adjusted freely.
 * A GUI can be called to see how the Robot moves.
-* The number of Robots can be scaled.
+ 

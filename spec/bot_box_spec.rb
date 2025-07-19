@@ -31,11 +31,17 @@ RSpec.describe BotBox do
   end
 
   describe ".run" do
-    let(:valid_command_file) { "commands.txt" }
+    let(:valid_command_file) { "spec/fixtures/valid_command" }
     let(:valid_board_size) { "5,5" }
 
-    it "initializes the TableTop with correct dimensions" do
-      expect(BotBox::TableTop).to receive(:new).with(5, 5)
+    it "initializes the TableTop and Robot with correct parameters" do
+      mock_table_top = instance_double(BotBox::TableTop)
+      mock_robot = instance_double(BotBox::Robot)
+      
+      expect(BotBox::TableTop).to receive(:new).with(length: 5, width: 5).and_return(mock_table_top)
+      expect(BotBox::Robot).to receive(:new).with(table_top: mock_table_top, command_file: valid_command_file).and_return(mock_robot)
+      expect(mock_robot).to receive(:simulate)
+      
       BotBox.run(command_file: valid_command_file, board_size: valid_board_size)
     end
 

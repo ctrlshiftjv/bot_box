@@ -6,7 +6,7 @@ task 'bot_box' do
   require "bot_box"
 
   command_file = ENV["command_file"]
-  board_size = ENV["board_size"] || 5
+  board_size = ENV["board_size"] || "5,5"
 
   BotBox.run(
     command_file: command_file, 
