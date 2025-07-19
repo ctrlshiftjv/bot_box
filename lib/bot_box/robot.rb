@@ -183,7 +183,7 @@ module BotBox
     def report
       return unless robot_placed?
 
-      BotBox.logger.info "#{x},#{y},#{f}"
+      BotBox.logger.info "Reporting: #{x},#{y},#{f}"
 
       # One of the requirement is to OUTPUT when report is called.
       puts "#{x},#{y},#{f}"

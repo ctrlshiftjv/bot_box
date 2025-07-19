@@ -25,4 +25,13 @@ module BotBox
   RIGHT = "RIGHT"
   REPORT = "REPORT"
 
+  # Run type CONSTANTS
+  LISTEN = "listen"
+  COMMAND_FILE = "file"
+
+  RUN_TYPES = [
+    LISTEN,
+    COMMAND_FILE
+  ]
+
 end

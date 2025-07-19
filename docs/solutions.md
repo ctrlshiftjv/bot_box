@@ -21,15 +21,35 @@ A Robot Simulator.
 * Any command that would cause the robot to fall off the table including initial placement will be classified as invalid and will be ingored. 
 
 ## Concept
-Just like in real life, the robot can receive a command file with a list of commands it needs to follow. Before it begins, it calls on the commander. The commander’s job is to look through the commands and get rid of anything that isn’t valid. This way, the robot only works with safe and proper instructions. After that, the robot goes through the list given by the commander. It is smart enough to check if a command will make it fall off the table and if it does, the robot simply ignore it.
+
+### Overview
+On startup, the application creates a tabletop and a robot. The robot is made aware of the tabletop so that it can check and respect its boundaries during movement.
+
+### Ways to Run the Simulation
+You can run the simulation in two ways:
+
+**Using a Command File**.
+Provide a file containing commands (one per line). The application will:
+* Validate the file
+* Parse the commands into a list
+* Make the Robot execute them in order
+
+**Interactive Mode (Console Input)**
+Run the program and enter commands directly via the console. The robot will process each command as you input them.
+
+
+
+### Debug Mode
+If you want to debug, you can start the program in a debug mode to see the steps the program is taking clearly.
 
 ## Entities
 * TableTop - holds the information of its bounds.
-* Commander - validates and sanitizes the commands
-* Command - a struct to hold a standardized format of a command.
+* CommandFile - validates file and parses line by line
+* Command - validates format of a command
 * Robot - holds all logic on how to perform a command.
 
 ## Enhancement
 * The table top dimensions can be adjusted freely.
 * Added log levels for better debugging.
+* Allow file mode to receive instructions from a file.
  

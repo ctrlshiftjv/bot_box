@@ -16,14 +16,15 @@ bundle install
 ```
 
 ## Usage
-In order to start a simulation, you must pass a file using the argument `command_file` like so:
-```bash
-rake bot_box command_file=commands/forward
+The most direct way to start the application is by running:
 ```
+rake bot_box
+```
+This will start the application in `listen` mode. You will be able to input your commands in the console to control the robot in real time.
 
-Alternatively, you can provide the size of the board with the optional argument `board_size`
+Alternatively, you can also provide a file containing a list of commands that you would like to perfom like so.
 ```bash
-rake bot_box command_file=commands/forward board_size=5,5
+rake bot_box run_type=file command_file=commands/forward
 ```
 
 For a full list of arguments:

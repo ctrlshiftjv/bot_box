@@ -15,12 +15,6 @@ module BotBox
         end
       end
     end
-  
-    # Shortcuts for convenience
-    def self.info(msg) = logger.info(msg)
-    def self.warn(msg) = logger.warn(msg)
-    def self.error(msg) = logger.error(msg)
-    def self.debug(msg) = logger.debug(msg)
 
   end
 end
