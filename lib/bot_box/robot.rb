@@ -7,16 +7,14 @@ module BotBox
   # The robot can be placed on the table top, and it can move, turn left, turn right, and report its position.
   # 
   # @param table_top [TableTop] - the table top on which the robot may be placed.
-  # @param command_file [String] - the file containing the commands to be executed by the robot.
   #
   # Example:
-  # robot = Robot.new(table_top: table_top, command_file: "commands")
+  # robot = Robot.new(table_top: table_top)
   # robot.simulate
   class Robot
 
     # table_top - the table top on which the robot may be placed.
-    # command_file - the file containing the commands to be executed by the robot.
-    attr_reader :table_top, :command_file
+    attr_reader :table_top
 
     # placed - whether the robot is placed on the table top
     attr_reader :placed
@@ -26,9 +24,8 @@ module BotBox
     # f - direction of the robot
     attr_reader :x, :y, :f
 
-    def initialize(table_top:, command_file:)
+    def initialize(table_top:)
       @table_top = table_top
-      @command_file = CommandFile.new(command_file)
 
       @placed = false
 
@@ -37,35 +34,39 @@ module BotBox
       @f = nil
     end
 
+    def execute_commands(commands)
+      commands.each do |command_line|
+        execute(command_line)
+      end
+    end
+
     # Simulate the robot's behavior.
     #
     # Got through each command and perform the action.
     # The other commands are ignored, if the robot is not placed.
-    def simulate
-      @command_file.commands.each do |command_line|
-        command = Command.new(command_line)
-        next unless command.is_valid
+    def execute(command_line)
+      BotBox.logger.info "Executing command: #{command_line}"
 
-        BotBox.logger.info "Command: #{command.command_type}"
+      command = Command.new(command_line)
+    
+      unless command.is_valid
+        BotBox.logger.warn "Invalid command: #{command_line}"
+        return
+      end
 
-        # Only perform the command, if the robot is placed or if the command is PLACE.
-        unless placed || command.command_type == PLACE
-          BotBox.logger.warn "Robot is not placed in the table top, ignoring command: #{command.command_type}"
-          next
-        end
+      BotBox.logger.info "Command: #{command.command_type}"
 
-        case command.command_type
-        when PLACE
-          place(*command.args)
-        when MOVE
-          move
-        when LEFT
-          turn_left
-        when RIGHT
-          turn_right
-        when REPORT
-          report
-        end
+      case command.command_type
+      when PLACE
+        place(*command.args)
+      when MOVE
+        move
+      when LEFT
+        turn_left
+      when RIGHT
+        turn_right
+      when REPORT
+        report
       end
     end
 
@@ -98,6 +99,8 @@ module BotBox
     # Before moving, the robot checks if the new position is valid.
     # If the new position is not valid, the robot does not move.
     def move
+      return unless robot_placed?
+
       BotBox.logger.info "Robot is moving..."
 
       new_x = @x
@@ -131,6 +134,8 @@ module BotBox
     # If it is facing south, it will face east.
     # If it is facing east, it will face north.
     def turn_left
+      return unless robot_placed?
+
       BotBox.logger.info "Turning left from #{@f}"
 
       case @f
@@ -154,6 +159,8 @@ module BotBox
     # If it is facing south, it will face west.
     # If it is facing west, it will face north.
     def turn_right
+      return unless robot_placed?
+
       BotBox.logger.info "Turning right from #{@f}"
 
       case @f
@@ -174,6 +181,8 @@ module BotBox
     #
     # @return [Array] - the robot's position.
     def report
+      return unless robot_placed?
+
       BotBox.logger.info "#{x},#{y},#{f}"
 
       # One of the requirement is to OUTPUT when report is called.
@@ -183,6 +192,18 @@ module BotBox
     end
 
     private
+
+    # Check if the robot is placed on the table top.
+    # If not placed, log a warning and return false.
+    #
+    # @return [Boolean] - true if the robot is placed, false otherwise.
+    def robot_placed?
+      unless placed
+        BotBox.logger.warn "Robot is not placed in the table top, ignoring command"
+        return false
+      end
+      true
+    end
 
     # Check if the position is valid.
     #
@@ -197,6 +218,5 @@ module BotBox
 
       true
     end
-
   end
 end

@@ -4,13 +4,12 @@ require 'bot_box/robot'
 
 RSpec.describe BotBox::Robot do
   let(:table_top) { BotBox::TableTop.new(length: 5, width: 5) }
-  let(:command_file) { 'spec/fixtures/valid_command' }
-  let(:robot) { described_class.new(table_top: table_top, command_file: command_file) }
+  let(:robot) { described_class.new(table_top: table_top) }
+  let(:command_file) { BotBox::CommandFile.new('spec/fixtures/valid_command') }
 
   describe '#initialize' do
     it 'creates robot with table top and command file' do
       expect(robot.table_top).to eq(table_top)
-      expect(robot.command_file).to be_a(BotBox::CommandFile)
       expect(robot.placed).to be false
       expect(robot.x).to be_nil
       expect(robot.y).to be_nil
@@ -180,27 +179,27 @@ RSpec.describe BotBox::Robot do
     end
   end
 
-  describe '#simulate' do
+  describe '#execute_commands' do
     it 'executes commands from file' do
-      robot.simulate
+      robot.execute_commands(command_file.commands)
       expect(robot.placed).to be true
     end
 
     it 'handles file with no valid commands' do
-      robot_no_valid = described_class.new(
-        table_top: table_top, 
-        command_file: 'spec/fixtures/no_valid_command'
-      )
-      robot_no_valid.simulate
+      command_file = BotBox::CommandFile.new('spec/fixtures/no_valid_command')
+
+      robot_no_valid = described_class.new(table_top: table_top)
+      robot_no_valid.execute_commands(command_file.commands)
+
       expect(robot_no_valid.placed).to be false
     end
 
     it 'handles file with mix of valid and invalid commands' do
-      robot_mix = described_class.new(
-        table_top: table_top, 
-        command_file: 'spec/fixtures/mix_command'
-      )
-      robot_mix.simulate
+      command_file = BotBox::CommandFile.new('spec/fixtures/mix_command')
+
+      robot_mix = described_class.new(table_top: table_top)
+      robot_mix.execute_commands(command_file.commands)
+
       expect(robot_mix.placed).to be true
       expect(robot_mix.report).to eq([4, 4, BotBox::EAST])
     end

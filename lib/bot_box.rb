@@ -26,8 +26,10 @@ module BotBox
   
     table_top = TableTop.new(length: length, width: width)
 
-    robot = Robot.new(table_top: table_top, command_file: command_file)
-    robot.simulate
+    command_file = CommandFile.new(command_file)
+
+    robot = Robot.new(table_top: table_top)
+    robot.execute_commands(command_file.commands)
   end
 
   def self.validate_board_size(board_size)
