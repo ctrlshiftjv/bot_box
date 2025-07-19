@@ -24,12 +24,12 @@ A Robot Simulator.
 Just like in real life, the robot can receive a command file with a list of commands it needs to follow. Before it begins, it calls on the commander. The commander’s job is to look through the commands and get rid of anything that isn’t valid. This way, the robot only works with safe and proper instructions. After that, the robot goes through the list given by the commander. It is smart enough to check if a command will make it fall off the table and if it does, the robot simply ignore it.
 
 ## Entities
-* TableTop - holds logic on the bounds.
-* Commander - holds all valid commands.
+* TableTop - holds the information of its bounds.
+* Commander - validates and sanitizes the commands
 * Command - a struct to hold a standardized format of a command.
 * Robot - holds all logic on how to perform a command.
 
 ## Enhancement
 * The table top dimensions can be adjusted freely.
-* A GUI can be called to see how the Robot moves.
+* Added log levels for better debugging.
  
