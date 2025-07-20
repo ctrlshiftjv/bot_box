@@ -3,10 +3,9 @@
 require "bot_box/config"
 
 module BotBox
-  # Command is a struct that contains the command type and the arguments
+  # Command is a class that contains the command type and the arguments
   #
-  # command_type - the type of command
-  # args - the arguments for the command
+  # @param command_line [String] - the command to be cleaned
   #
   # Example:
   # command = Command.new("PLACE 1,2,NORTH")
@@ -20,6 +19,9 @@ module BotBox
   # command.is_valid # => true
   class Command
 
+    # is_valid [Boolean] - whether the command is valid
+    # command_type [String] - the type of command
+    # args [Array] - the arguments for the command
     attr_reader :is_valid, :command_type, :args
 
     def initialize(command_line)
@@ -33,8 +35,7 @@ module BotBox
     private
 
     # Clean the command;
-    # if command is a valid command, return a Command object.
-    # if command is not a valid command, return nil.
+    # if command is a valid command, set the command_type and args.
     #
     # @param command [String] - the command to be cleaned
     def clean_command(command)

@@ -102,6 +102,8 @@ module BotBox
 
     # Move the robot one step forward in the direction it is facing.
     #
+    # If the robot is not placed, it can not move.
+    #
     # Before moving, the robot checks if the new position is valid.
     # If the new position is not valid, the robot does not move.
     def move
@@ -135,10 +137,15 @@ module BotBox
 
     # Turn the robot 90 degrees to the left.
     #
-    # The robot will turn left, if it is facing north, it will face west.
-    # If it is facing west, it will face south.
-    # If it is facing south, it will face east.
-    # If it is facing east, it will face north.
+    # If the robot is not placed, it can not turn left.
+    #
+    # The robot will turn left, 
+    # - if it is facing north, it will face west.
+    # - If it is facing west, it will face south.
+    # - If it is facing south, it will face east.
+    # - If it is facing east, it will face north.
+    #
+    # @return [void]
     def turn_left
       return unless robot_placed?
 
@@ -159,11 +166,16 @@ module BotBox
     end
 
     # Turn the robot 90 degrees to the right.
+    # 
+    # If the robot is not placed, it can not turn right.
     #
-    # The robot will turn right, if it is facing north, it will face east.
-    # If it is facing east, it will face south.
-    # If it is facing south, it will face west.
-    # If it is facing west, it will face north.
+    # The robot will turn right, 
+    # - if it is facing north, it will face east.
+    # - If it is facing east, it will face south.
+    # - If it is facing south, it will face west.
+    # - If it is facing west, it will face north.
+    #
+    # @return [void]
     def turn_right
       return unless robot_placed?
 
@@ -184,6 +196,8 @@ module BotBox
     end
 
     # Report the robot's position.
+    #
+    # If the robot is not placed, it can not report its position.
     #
     # @return [Array] - the robot's position.
     def report
