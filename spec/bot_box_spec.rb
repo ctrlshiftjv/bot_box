@@ -35,7 +35,7 @@ RSpec.describe BotBox do
     it "raises ArgumentError for invalid format" do
       expect {
         BotBox.validate_board_size("invalid")
-      }.to raise_error(ArgumentError, "Board size must be in the format of 'width,height'")
+      }.to raise_error(ArgumentError, "Board size must be in the format of 'length,width'")
     end
   end
 
