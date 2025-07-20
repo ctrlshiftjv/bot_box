@@ -37,8 +37,6 @@ Provide a file containing commands (one per line). The application will:
 **Interactive Mode (Console Input)**
 Run the program and enter commands directly via the console. The robot will process each command as you input them.
 
-
-
 ### Debug Mode
 If you want to debug, you can start the program in a debug mode to see the steps the program is taking clearly.
 

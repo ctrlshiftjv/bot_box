@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module BotBox
   # A table top on which the robot can move.
@@ -11,8 +12,8 @@ module BotBox
   # table_top = TableTop.new(length: 5, width: 5)
   class TableTop
 
-    # length - the length of the table top.
-    # width - the width of the table top.
+    # @param length [Integer] - the length of the table top (x-axis).
+    # @param width [Integer] - the width of the table top (y-axis).
     attr_reader :length, :width
 
     def initialize(length:, width:)

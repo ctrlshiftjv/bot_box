@@ -3,7 +3,7 @@
 require "bot_box/config"
 
 module BotBox
-  # A smart robot that can move on a table top. It accepts a command file and executes the commands.
+  # A smart robot that can move on a table top. It accepts a command or a list of commands to execute.
   # The robot can be placed on the table top, and it can move, turn left, turn right, and report its position.
   # 
   # @param table_top [TableTop] - the table top on which the robot may be placed.
@@ -13,15 +13,15 @@ module BotBox
   # robot.simulate
   class Robot
 
-    # table_top - the table top on which the robot may be placed.
+    # table_top [TableTop] - the table top on which the robot may be placed.
     attr_reader :table_top
 
-    # placed - whether the robot is placed on the table top
+    # placed [Boolean] - whether the robot is placed on the table top
     attr_reader :placed
 
-    # x - position on the x-axis
-    # y - position on the y-axis
-    # f - direction of the robot
+    # x [Integer] - position on the x-axis (length)
+    # y [Integer] - position on the y-axis (width)
+    # f [String] - direction of the robot (NORTH, SOUTH, EAST, WEST)
     attr_reader :x, :y, :f
 
     def initialize(table_top:)
@@ -34,16 +34,22 @@ module BotBox
       @f = nil
     end
 
+    # Execute a list of commands.
+    #
+    # @param commands [Array] - the list of commands to execute.
+    #
+    # @return [void]
     def execute_commands(commands)
       commands.each do |command_line|
         execute(command_line)
       end
     end
 
-    # Simulate the robot's behavior.
+    # Execute a single command.
     #
-    # Got through each command and perform the action.
-    # The other commands are ignored, if the robot is not placed.
+    # @param command_line [String] - the command to execute.
+    #
+    # @return [void]
     def execute(command_line)
       BotBox.logger.info "Executing command: #{command_line}"
 

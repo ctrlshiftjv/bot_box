@@ -32,7 +32,7 @@ For a full list of arguments:
 | Argument | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
 | `run_type` | String | No | listen | One of the following - listen, file |
-| `command_file` | String | Yes (file) | - | Path to the command file |
+| `command_file` | String | Yes (file) | - | Required for run_type=file. Path to the command file |
 | `board_size` | String | No | `5,5` | L,W format where L and W are positive integers excluding zero |
 | `log_level` | String | No | `unknown` | One of: debug, info, warn, error, fatal, unknown |
 

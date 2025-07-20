@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 
-# puts "BotBox loading..."
 require "logger"
 
 require "bot_box/config"
@@ -10,12 +10,10 @@ require "bot_box/command"
 require "bot_box/robot"
 require "bot_box/table_top"
 
-# puts "BotBox loaded..."
-
 module BotBox
 
   def self.run(run_type: nil, command_file: nil, board_size: nil, log_level: nil)
-    BotBox.logger.level = get_safe_log_level(log_level)
+    BotBox.logger.level = get_with_default_log_level(log_level)
     BotBox.logger.info "#{BotBox::NAME} v#{BotBox::VERSION} booting..."
 
     run_type = get_run_type(run_type)
@@ -29,7 +27,7 @@ module BotBox
   # Runs the robot with the given command file and board size.
   #
   # @param command_file [String] - the path to the command file.
-  # @param board_size [String] - the size of the board in the format of "width,height".
+  # @param board_size [String] - the size of the board in the format of "length,width".
   #
   # @return [void]
   def self.run_command_file(command_file:, board_size:)
@@ -53,7 +51,7 @@ module BotBox
   #
   # The robot will listen for commands from the user and execute them.
   #
-  # @param board_size [String] - the size of the board in the format of "width,height".
+  # @param board_size [String] - the size of the board in the format of "length,width".
   #
   # @return [void]
   def self.run_listen(board_size:)
@@ -73,6 +71,13 @@ module BotBox
     end
   end
 
+  # Gets the run type.
+  # If no run type is provided, the default is listen.
+  # If the run type is invalid, an error is raised.
+  #
+  # @param run_type [String] - the run type.
+  #
+  # @return [String] - the run type.
   def self.get_run_type(run_type)
     return LISTEN if run_type.nil? || run_type.empty?
 
@@ -82,17 +87,25 @@ module BotBox
   end
 
   # Gets the safe log level.
+  # If no log level is provided, the default is unknown.
+  # Otherwise, the log level is returned.
+  #
+  # NOTE: We are using the default levels of Ruby's Logger.
+  # https://ruby-doc.org/stdlib-3.3.3/libdoc/logger/rdoc/Logger.html#class-Logger-label-Log+Levels
+  # If the log level is not valid, it will raise an error.
   #
   # @param log_level [String] - the log level.
   #
   # @return [String] - the safe log level.
-  def self.get_safe_log_level(log_level)
+  def self.get_with_default_log_level(log_level)
     log_level.nil? ? ::Logger::UNKNOWN : log_level
   end
 
   # Validates the board size.
+  # If no board size is provided, the default is 5,5.
+  # If the board size is invalid, an error is raised.
   #
-  # @param board_size [String] - the size of the board in the format of "width,height".
+  # @param board_size [String] - the size of the board in the format of "length,width".
   #
   # @return [Integer, Integer] - the board size.
   def self.validate_board_size(board_size)
@@ -100,13 +113,14 @@ module BotBox
 
     result = board_size.split(",").map(&:to_i)
     if result.size != 2 || result[0].nil? || result[1].nil?
-      raise ArgumentError, "Board size must be in the format of 'width,height'"
+      raise ArgumentError, "Board size must be in the format of 'length,width'"
     end
 
     result
   end
   
   # Validates the command file.
+  # If no command file is provided, an error is raised.
   #
   # @param command_file [String] - the path to the command file.
   #
@@ -118,6 +132,7 @@ module BotBox
   end
 
   # Gets the logger.
+  # This is just a wrapper around the Logger Module which we use a singleton for the app.
   #
   # @return [Logger] - the logger.
   def self.logger
