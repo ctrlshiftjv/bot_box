@@ -41,7 +41,7 @@ module BotBox
     def clean_command(command)
       return if command.nil? || command.empty?
 
-      if [MOVE, LEFT, RIGHT, REPORT].include?(command)
+      if [FLIP, MOVE, LEFT, RIGHT, REPORT].include?(command)
         @is_valid = true
         @command_type = command
       end

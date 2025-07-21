@@ -22,6 +22,7 @@ module BotBox
   # Command CONSTANTS
   PLACE = "PLACE"
   MOVE = "MOVE"
+  FLIP = "FLIP"
   LEFT = "LEFT"
   RIGHT = "RIGHT"
   REPORT = "REPORT"

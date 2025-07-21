@@ -37,6 +37,15 @@ RSpec.describe BotBox::Command do
         expect(command.command_type).to eq("REPORT")
         expect(command.args).to be_nil
       end
+
+
+      it 'creates valid FLIP command' do
+        command = described_class.new("FLIP")
+        
+        expect(command.is_valid).to be true
+        expect(command.command_type).to eq("FLIP")
+        expect(command.args).to be_nil
+      end
     end
 
     context 'with PLACE commands' do

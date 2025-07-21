@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'stringio'
+
 require "bot_box/config"
 
 module BotBox
@@ -67,6 +69,8 @@ module BotBox
         place(*command.args)
       when MOVE
         move
+      when FLIP
+        flip
       when LEFT
         turn_left
       when RIGHT
@@ -133,6 +137,26 @@ module BotBox
       else
         BotBox.logger.warn "Robot cannot move to #{new_x},#{new_y},#{f}"
       end
+    end
+
+    # Turn the robot 180 degrees
+    def flip
+      return unless robot_placed?
+
+      BotBox.logger.info "Turning flip from #{@f}"
+
+      case @f
+      when NORTH
+        @f = SOUTH
+      when SOUTH
+        @f = NORTH
+      when EAST
+        @f = WEST
+      when WEST
+        @f = EAST
+      end
+
+      BotBox.logger.info "Turned flip to #{@f}"
     end
 
     # Turn the robot 90 degrees to the left.
@@ -208,6 +232,9 @@ module BotBox
       # One of the requirement is to OUTPUT when report is called.
       puts "#{x},#{y},#{f}"
 
+      # Show the Matrix Position of the Robot
+      radar_layout_report
+
       [x,y,f]
     end
 
@@ -235,8 +262,39 @@ module BotBox
       return false if new_x.nil? || new_y.nil?
       return false if new_x < 0 || new_x >= table_top.length
       return false if new_y < 0 || new_y >= table_top.width
+      return false if table_top.has_obstacles?(new_x, new_y)
 
       true
+    end
+
+    # View the position of the robot on the table top.
+    #
+    # This will direct output to the console how the robots sees the table top.
+    # Each unit of the table top is represented by a dot.
+    # The robot is represented by an 'x'.
+    # The obstacle is represented by a 'o'.
+    #
+    # @return [void]
+    def radar_layout_report
+      max_x = table_top.length - 1
+      max_y = table_top.width - 1
+    
+      output = StringIO.new
+    
+      max_y.downto(0) do |cy|
+        0.upto(max_x) do |cx|
+          if cx == x && cy == y
+            output << " x "
+          elsif table_top.has_obstacles?(cx, cy)
+            output << " o "
+          else
+            output << " . "
+          end
+        end
+        output << "\n"
+      end
+
+      puts output.string
     end
   end
 end

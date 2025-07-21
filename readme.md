@@ -46,6 +46,7 @@ Commands are read from a file with one command per line:
 - `MOVE` - Move robot one unit forward
 - `LEFT` - Turn robot 90° left
 - `RIGHT` - Turn robot 90° right  
+- `FLIP` - Turn robot 90°
 - `REPORT` - Output current position and direction
 
 ### Example Commands
