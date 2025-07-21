@@ -35,6 +35,27 @@ RSpec.describe BotBox::Robot do
       expect(robot.f).to be_nil
       expect(robot.placed).to be false
     end
+
+    it 'ignores position out of bounds' do
+      robot.place(5, 2, BotBox::NORTH)
+      
+      expect(robot.x).to be_nil
+      expect(robot.y).to be_nil
+      expect(robot.f).to be_nil
+      expect(robot.placed).to be false
+    end
+
+    it 'ignores when there is an obstacle' do
+      obstacle = BotBox::TableTops::Obstacle.new(2, 2)
+      table_top_with_obstacle = BotBox::TableTop.new(length: 5, width: 5, obstacles: [obstacle])
+      robot_with_obstacle = described_class.new(table_top: table_top_with_obstacle)
+      robot_with_obstacle.place(2, 2, BotBox::NORTH)
+
+      expect(robot_with_obstacle.x).to be_nil
+      expect(robot_with_obstacle.y).to be_nil
+      expect(robot_with_obstacle.f).to be_nil
+      expect(robot_with_obstacle.placed).to be false
+    end
   end
 
   describe '#move' do
@@ -109,6 +130,17 @@ RSpec.describe BotBox::Robot do
         expect(robot.x).to eq(x)
         expect(robot.y).to eq(0)
       end
+    end
+
+    it 'ignores move when there is an obstacle' do
+      obstacle = BotBox::TableTops::Obstacle.new(2, 3)
+      table_top_with_obstacle = BotBox::TableTop.new(length: 5, width: 5, obstacles: [obstacle])
+      robot_with_obstacle = described_class.new(table_top: table_top_with_obstacle)
+      robot_with_obstacle.place(2, 2, BotBox::NORTH)
+      robot_with_obstacle.move
+
+      expect(robot_with_obstacle.x).to eq(2)
+      expect(robot_with_obstacle.y).to eq(2)
     end
   end
 
