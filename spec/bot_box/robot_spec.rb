@@ -112,6 +112,36 @@ RSpec.describe BotBox::Robot do
     end
   end
 
+  describe '#flip' do
+  it 'flips from north to south' do
+    robot.place(0, 0, BotBox::NORTH)
+    robot.flip
+
+    expect(robot.f).to eq(BotBox::SOUTH)
+  end
+
+  it 'flips from south to north' do
+    robot.place(0, 0, BotBox::SOUTH)
+    robot.flip
+
+    expect(robot.f).to eq(BotBox::NORTH)
+  end
+
+  it 'flips from east to west' do
+    robot.place(0, 0, BotBox::EAST)
+    robot.flip
+
+    expect(robot.f).to eq(BotBox::WEST)
+  end
+
+  it 'flips from west to east' do
+    robot.place(0, 0, BotBox::WEST)
+    robot.flip
+
+    expect(robot.f).to eq(BotBox::EAST)
+  end
+end
+
   describe '#turn_left' do
     it 'turns left from north to west' do
       robot.place(0, 0, BotBox::NORTH)
