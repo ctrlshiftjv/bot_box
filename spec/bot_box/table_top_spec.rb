@@ -39,4 +39,45 @@ RSpec.describe BotBox::TableTop do
       end
     end
   end
+
+  describe '#has_obstacles?' do
+    let(:obstacle_class) { BotBox::TableTops::Obstacle }
+
+    context 'when there are no obstacles' do
+      let(:table) { described_class.new(length: 5, width: 5) }
+
+      it 'returns false for any position' do
+        expect(table.has_obstacles?(1, 1)).to be false
+        expect(table.has_obstacles?(0, 0)).to be false
+      end
+    end
+
+    context 'when there is an obstacle at the given position' do
+      let(:obstacle) { obstacle_class.new(2, 3) }
+      let(:table) { described_class.new(length: 5, width: 5, obstacles: [obstacle]) }
+
+      it 'returns true for the obstacle position' do
+        expect(table.has_obstacles?(2, 3)).to be true
+      end
+
+      it 'returns false for other positions' do
+        expect(table.has_obstacles?(1, 1)).to be false
+        expect(table.has_obstacles?(2, 2)).to be false
+      end
+    end
+
+    context 'when there are multiple obstacles' do
+      let(:obstacles) { [obstacle_class.new(0, 0), obstacle_class.new(4, 4)] }
+      let(:table) { described_class.new(length: 5, width: 5, obstacles: obstacles) }
+
+      it 'returns true for any position with an obstacle' do
+        expect(table.has_obstacles?(0, 0)).to be true
+        expect(table.has_obstacles?(4, 4)).to be true
+      end
+
+      it 'returns false for positions without obstacles' do
+        expect(table.has_obstacles?(2, 2)).to be false
+      end
+    end
+  end
 end

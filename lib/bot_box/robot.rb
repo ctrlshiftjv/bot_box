@@ -254,6 +254,11 @@ module BotBox
 
     # Check if the position is valid.
     #
+    # The position is valid if:
+    # - The x-coordinate is greater than or equal to 0 and less than the length of the table top.
+    # - The y-coordinate is greater than or equal to 0 and less than the width of the table top.
+    # - The position does not have an obstacle.
+    #
     # @param x [Integer] - the x-coordinate of the position.
     # @param y [Integer] - the y-coordinate of the position.
     #
